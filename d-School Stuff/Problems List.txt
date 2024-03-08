@@ -1,0 +1,50 @@
+PROBLEM 1:  SOUTHERN YELLOW-BILLED HORNBILLS
+	The main challenge of this problem is to cool down the boxes the birds live in (max 50.6 degrees)
+	The boxes are 1.5m above ground and are monitored via camera
+	There are issues with the camera recording too late/missing something entirely/general unreliability
+	The interior of the box must remain wood
+	The current measuring process is as follows:
+		The lid of the box is lifted
+		The female is lifted with a pillowcase(?)
+		All the chicks are measured
+		Everyone is replaced and the lid goes back on
+PROBLEM 2: THE DRONGOS
+	The main challenge for these guys is basically just to measure their body masses against their nesting temperature
+	They range in weight from 42-62g with a mean of 50g. We would need an error margin of less than 5g
+	Owls eat the chicks in the twilight hours, so nests will have to be monitored, especially at these times
+	Same issues with camera unreliability. I don't really know which problem actually mentioned it but it's pretty obvious that it's 	important to these guys
+	The process for recording the drongos is as follows:
+		Climb up (some object. I imagine a pole or something)
+		Fetch the camera
+		Collect the recorded data and replace the battery
+		Put the camera back and climb down
+PROBLEM 3: GROUND HORNBILL
+	Live in artificial nests 4m above ground and nested in or near the centre of a tree
+	Nests are around 40cm wide x 60cm deep x >110cm height (the birds are around 110cm tall)
+	The birds weigh between around 3-5kg
+	Can expect anything between 2 to 11 birds at any given point in time
+	The aim of the client is to investigate the impact of temperature and available food
+	Another main issue is the long drives between spots and climbing a 6m ladder to measure chicks manually, swap camera traps
+	These birds are very shy. They can only be measured while nesting
+	Anything visible/hearable will be destroyed
+	Max battery capacity of 2-3 weeks (?!?!?!?!)
+	There will often be multiple birds in the nest at the same time
+	A scale recording threshold of >2kg is recommended
+	A camera must be recording the nest as a weight reading is taken
+	These birds sometimes land and perch on the nest roof
+	Point of Interest: These guys have unique faces and unique calls. My mind went to AI but I'm pretty sure it would take 3 years of 	a team of 20 to produce anything useful in that regard
+	Only females and chicks chill in the nest, but there's also food and other rubbish going in and out of there so measuring is 	unreliable at best
+	The "perches" in front of the nests can have some give/wobble/movement without bugging them
+	This is, by far, in my opinion, the most difficult problem on our roster. I don't know if that is gonna make some of you curious 	to what we can do, but if we end up running with this we're gonna have to be ready to work hard
+PROBLEM 4: SECRETARY BIRDS
+	The main problem here is literally just camera stability. The homie had a GoPro on a long pole and it swayed in the wind, but if 	we run with this I'm sure we can give him more than one of those concrete umbrella stands
+	Visible wires are not allowed
+	The entire system itself shouldn't be too visible, either
+	This whole thing is to monitor birds that nest on the tops of trees
+	This definitely seems like the easiest problem on our roster
+PROBLEM 5: RED-WINGED STARLINGS
+	This is an on-campus project. The aim is to study the breeding pattern of these guys
+	Require cameras to watch nests that won't get stolen by passers-by
+	Would like to last with no charge for up to 2 MONTHS
+	Livestreaming capabilities would be a bonus
+	Scales to auto-record weights (150-160g MAX)
