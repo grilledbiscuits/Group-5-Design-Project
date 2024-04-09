@@ -23,8 +23,9 @@ h1 {
 
 .entry {
     height: 50px;
-    width: 10%;
+    width: 200px;
     background-color: powderblue;
+    border-radius: 7px;
 
 }
 
@@ -48,6 +49,18 @@ h1 {
     background-color: #ff8c00;
     color: white;
     float: right;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+
+}
+
+.btn-back {
+    background-color: #ff2a00;
+    color: white;
     padding: 10px 20px;
     font-size: 18px;
     border: none;

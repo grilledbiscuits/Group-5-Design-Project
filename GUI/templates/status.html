@@ -4,16 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <title>Status</title>
 </head>
 
 <body>
-    <h1>Status</h1>
-    <p>Battery Percentage: {{ battery_percentage}}</p>
-    <p>WiFi Strength: {{wifi_strength}}</p>
-    <p>Uptime: {{uptime}}</p>
-    <p>Time: {{time_of_day}}</p>
-    <a href="/">Back</a>
+    <div class="block">
+        <h1>Status</h1>
+        <p>Battery Percentage: {{ battery_percentage}}</p>
+        <p>WiFi Strength: {{wifi_strength}}</p>
+        <p>Uptime: {{uptime}}</p>
+        <p>Time: {{time_of_day}}</p>
+        <a href="/" class="btn-back">Back</a>
+    </div>
 </body>
 
 </html>

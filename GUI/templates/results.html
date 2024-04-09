@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <title>Result</title>
 </head>
 
 <body>
-    <h1>Result:</h1>
-    <p>{{ user_input }}</p>
-    <a href="/">Back</a>
+    <div class="block">
+        <h1>Result:</h1>
+        <p>{{ user_input }}</p>
+        <a href="/" class="btn-back">Back</a>
+    </div>
 </body>
 
 </html>
