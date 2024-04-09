@@ -5,5 +5,54 @@ body {
 }
 
 h1 {
-    color: #e90c0c;
+    color: #f4eded;
+}
+
+/* static/main.css */
+
+.block {
+    background-color: #001f3f;
+    /* Dark blue color */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    color: white;
+    position: relative;
+    /* Text color */
+}
+
+.entry {
+    height: 50px;
+    width: 10%;
+    background-color: powderblue;
+
+}
+
+.input-text {
+    flex: 1;
+    margin-right: 100px;
+}
+
+.btn-go {
+    background-color: #2ecc71;
+    /* Green color */
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-status {
+    background-color: #ff8c00;
+    color: white;
+    float: right;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+
 }
