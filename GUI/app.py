@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+import datetime
 
 app = Flask(__name__)
 
@@ -23,8 +24,11 @@ def status():
     battery_percentage = "80%"
     wifi_strength = "Strong"
     uptime = "3 days"
-    time_of_day = "10:00 AM"
-    return render_template('status.html', battery_percentage=battery_percentage, wifi_strength=wifi_strength, uptime=uptime, time_of_day=time_of_day)
+    dt = datetime.datetime.today()
+    time_of_day = str(dt.hour) + ":" + str(dt.minute) + \
+        ":" + str(dt.second) + "." + str(dt.microsecond)
+    date = str(dt.year) + " / "+str(dt.month)+" / " + str(dt.day)
+    return render_template('status.html', date=date, battery_percentage=battery_percentage, wifi_strength=wifi_strength, uptime=uptime, time_of_day=time_of_day)
 
 
 if __name__ == '__main__':
