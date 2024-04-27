@@ -9,21 +9,21 @@
 </head>
 
 <body>
-
     <div class="block">
         <h1>Graphical User Interface</h1>
         <h3>Details:</h3>
         <div class="details">
-            Number of images = {{images}}<br>
-            Start date = {{star_date}}<br>
-            End date = {{end_date}}<br><br>
+            <strong> Number of images</strong><br>{{images}}<br><br>
+            <strong> Start date</strong> <br> {{star_date}}<br><br>
+            <strong>End date</strong> <br> {{end_date}}<br><br><br>
         </div>
 
         <form action="/submit" method="post" class="input-text">
-            Enter the number of images you would like to see:
+            <b>Enter the range of dates you would like to see:</b>
             <br>
-            <input type="text" name="user_input" placeholder="Number of images" class="entry">
+            <input type="date" name="user_input" placeholder="First date" class="entry">
             <br>
+            <input type="date" name="user_input" placeholder="Second date" class="entry">
             <br>
             <button type="submit" class="btn-go">Go</button>
         </form>
@@ -31,6 +31,10 @@
         <div class="block-1">
             <a href="/status" class="btn-status">Check Status</a>
         </div>
+    </div>
+    <div class="block">
+        <h1>Number of Pictures Taken on Each Date</h1>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="scatterplot">
     </div>
 
 </body>
