@@ -10,10 +10,12 @@
 
 <body>
     <div class="block">
-        <h1>Result:</h1>
-        <p>{{ date1 }}</p>
-        <p>{{ date2 }}</p>
-        <a href="/" class="btn-back">Back</a>
+        <h1>Search Results</h1>
+    <ul>
+        {% for image_file in image_files %}
+            <li><img src="{{ url_for('static', filename='images/' + image_file) }}"></li>
+        {% endfor %}
+    </ul>
     </div>
 </body>
 

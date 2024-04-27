@@ -13,11 +13,12 @@ def filter_images_by_date(start_date, end_date):
     images_dir = 'images'
     for filename in os.listdir(images_dir):
         if filename.endswith('.jpg') or filename.endswith('.png'):
-            creation_time = datetime.fromtimestamp(os.path.getctime(os.path.join(images_dir, filename)))
+            creation_time_str = datetime.fromtimestamp(os.path.getctime(os.path.join(images_dir, filename))).strftime('%Y-%m-%d')
+            creation_time = datetime.strptime(creation_time_str, '%Y-%m-%d')
+            creation_time = str(creation_time)
             if start_date <= creation_time <= end_date:
                 image_files.append(filename)
     return image_files
-
 
 def dates():
     """Returns a list of dates of the creation of all the files in a given directory"""
@@ -40,8 +41,7 @@ def dates():
     creation_dates = []
     directory = "images"
     if not os.path.isdir(directory):
-        print("Invalid directory path.")
-        return
+        return "Invalid directory path."
 
     files = os.listdir(directory)
     for file in files:
@@ -103,14 +103,17 @@ def submit():
     date2 = request.form['date2']
     pic_dates = dates()
     
+    if (date1 == "" or date2==""):
+        return "Fill out both of them my guy"
     
     if (date2 < date1):
         temp = date1
         date1 = date2
         date2 = temp
         
-    
-    return render_template('results.html', date1 = date1, date2 = date2)
+    image_files = filter_images_by_date(date1, date2)
+        
+    return render_template('results.html', image_files=image_files)
 
 
 @app.route('/status')
