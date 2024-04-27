@@ -8,6 +8,16 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 
+def filter_images_by_date(start_date, end_date):
+    image_files = []
+    images_dir = 'images'
+    for filename in os.listdir(images_dir):
+        if filename.endswith('.jpg') or filename.endswith('.png'):
+            creation_time = datetime.fromtimestamp(os.path.getctime(os.path.join(images_dir, filename)))
+            if start_date <= creation_time <= end_date:
+                image_files.append(filename)
+    return image_files
+
 
 def dates():
     """Returns a list of dates of the creation of all the files in a given directory"""
@@ -79,7 +89,7 @@ def index():
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
-
+    
     number_of_images = len(creation_dates)
     star_date = creation_dates[0]
     end_date = creation_dates[-1]
@@ -89,8 +99,18 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    user_input = request.form['user_input']
-    return render_template('results.html', user_input=user_input)
+    date1 = request.form['date1']
+    date2 = request.form['date2']
+    pic_dates = dates()
+    
+    
+    if (date2 < date1):
+        temp = date1
+        date1 = date2
+        date2 = temp
+        
+    
+    return render_template('results.html', date1 = date1, date2 = date2)
 
 
 @app.route('/status')
