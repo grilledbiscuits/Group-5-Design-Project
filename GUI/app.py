@@ -12,7 +12,7 @@ def filter_images_by_date(start_date, end_date):
     image_files = []
     images_dir = 'images'
     for filename in os.listdir(images_dir):
-        if filename.endswith('.jpg') or filename.endswith('.png'):
+        if filename.endswith('.jpeg') or filename.endswith('.jpg') or filename.endswith('.png'):
             creation_time_str = datetime.fromtimestamp(os.path.getctime(os.path.join(images_dir, filename))).strftime('%Y-%m-%d')
             creation_time = datetime.strptime(creation_time_str, '%Y-%m-%d')
             creation_time = str(creation_time)
@@ -112,7 +112,7 @@ def submit():
         date2 = temp
         
     image_files = filter_images_by_date(date1, date2)
-        
+    print(image_files)
     return render_template('results.html', image_files=image_files)
 
 
@@ -125,7 +125,7 @@ def status():
     dt = datetime.today()
     time_of_day = str(dt.hour) + ":" + str(dt.minute) + \
         ":" + str(dt.second) + "." + str(dt.microsecond)
-    date = str(dt.year) + " / "+str(dt.month)+" / " + str(dt.day)
+    date = str(dt.year) + " - "+str(dt.month)+" - " + str(dt.day)
     return render_template('status.html', date=date, battery_percentage=battery_percentage, wifi_strength=wifi_strength, uptime=uptime, time_of_day=time_of_day)
 
 

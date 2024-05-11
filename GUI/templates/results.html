@@ -11,13 +11,11 @@
 <body>
     <div class="block">
         <h1>Search Results</h1>
-        <img src="images/img_chania.jpg" alt="Flowers in Chania" width="460" height="345">
     <ul>
         {% for image_file in image_files %}
-            <li><img src="{{ url_for('static', filename='images/' + image_file) }}"></li>
+            <li><img src="static/{{image_file}}" width="460" height="345"></li>
         {% endfor %}
     </ul>
     </div>
 </body>
-<img src="/home/best/Desktop/EEE4113F/Group-5-Design-Project/GUI/images/WhatsApp Image 2024-04-27 at 22.55.51.jpeg" width="460" height="345">
 </html>
