@@ -1,43 +1,31 @@
-import os
-import platform
-import time
+import pandas as pd
+import matplotlib.pyplot as plt
 
-def creation_date(file_path):
-    """
-    Try to get the date that a file was created, falling back to when it was
-    last modified if that isn't possible.
-    """
-    if platform.system() == 'Windows':
-        return os.path.getctime(file_path)
-    else:
-        stat = os.stat(file_path)
-        try:
-            return stat.st_birthtime
-        except AttributeError:
-            # Some systems (like Linux) don't have st_birthtime, so we use st_mtime instead
-            return stat.st_mtime
+def plot_hour_counts(df):
+    # Convert the timestamp column to datetime type
+    df['timestamp'] = pd.to_datetime(df['Dates'])
+    
+    # Extract the hours from the timestamp column
+    df['hour'] = df['timestamp'].dt.hour
+    
+    # Count the occurrences of each hour
+    hour_counts = df['hour'].value_counts().sort_index()
+    
+    # Plot the data
+    plt.figure(figsize=(10, 6))
+    hour_counts.plot(kind='bar', color='skyblue')
+    
+    plt.title('Number of Times Each Hour Appears')
+    plt.xlabel('Hour')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=0)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.show()
 
-def main():
-    folder_path = "images"
-    if os.path.exists(folder_path) and os.path.isdir(folder_path):
-        files_info = []  # List to store (filename, creation_date) tuples
-        files = os.listdir(folder_path)
-        for file in files:
-            file_path = os.path.join(folder_path, file)
-            if os.path.isfile(file_path):
-                created_timestamp = creation_date(file_path)
-                files_info.append((file, created_timestamp))
-        
-        # Sort files_info based on creation dates
-        files_info.sort(key=lambda x: x[1])
-        
-        # Print sorted creation dates
-        for file_info in files_info:
-            file_name, created_timestamp = file_info
-            created_date = time.strftime('%m-%d %H:%M:%S', time.localtime(created_timestamp))
-            print(f"The file {file_name} was created on: {created_date}")
-    else:
-        print("Folder 'images' not found or is not a directory.")
+# Example dataframe
+data = {'Dates': ['2024-05-11 08:30:00', '2024-05-11 12:45:00', '2024-05-11 18:20:00', '2024-05-11 12:30:00']}
+df = pd.DataFrame(data)
 
-if __name__ == "__main__":
-    main()
+# Call the function to plot hour counts
+plot_hour_counts(df)
