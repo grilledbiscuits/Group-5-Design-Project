@@ -10,6 +10,8 @@ from io import BytesIO
 import base64
 from collections import Counter
 
+
+
 def extract_hours(df):
     # Convert the timestamp column to datetime type
     df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -23,7 +25,7 @@ def extract_hours(df):
 def filter_images_by_date(start_date, end_date):
     """Given a list of images, and a set of dates return images made between those dates"""
     image_files = []
-    images_dir = 'images'
+    images_dir = 'static'
     for filename in os.listdir(images_dir):
         if filename.endswith('.jpeg') or filename.endswith('.jpg') or filename.endswith('.png'):
             creation_time_str = datetime.fromtimestamp(os.path.getctime(os.path.join(images_dir, filename))).strftime('%Y-%m-%d')
@@ -52,7 +54,7 @@ def dates():
                 return datetime.fromtimestamp(stat.st_mtime)
 
     creation_dates = []
-    directory = "images"
+    directory = "static"
     if not os.path.isdir(directory):
         return "Invalid directory path."
 
