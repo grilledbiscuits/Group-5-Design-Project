@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 from collections import Counter
+import plotly.graph_objs as go
+import plotly.io as pio
+
 
 
 
@@ -73,74 +76,91 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 
-    creation_dates = dates()
-
-    # Sample data: list of dates when pictures were taken
-    picture_dates = dates()
-    #print(picture_dates)
-    # Convert the list to a pandas DataFrame
-    df = pd.DataFrame({'Date': picture_dates})
     
-    df['Dates'] = pd.to_datetime(df['Date'])
+    number_of_images = len(dates())
+    star_date = dates()[0]
+    end_date = dates()[-1]
     
-    # Extract the hours from the timestamp column
-    df['date'] = df['Dates'].dt.date
+    
 
+    
+    
+    # Convert string timestamps to datetime objects
+    picture_taken_times_dt = dates()
+    
+    # Extract the date from each timestamp (as a string in 'YYYY-MM-DD' format)
+    temp = [dt.date().strftime("%Y-%m-%d") for dt in picture_taken_times_dt]
+    
     # Count the occurrences of each date
-    date_counts = df['date'].value_counts().reset_index()
-    date_counts.columns = ['Date', 'Count']
-
-    # Convert the 'Date' column to datetime
-    date_counts['Date'] = pd.to_datetime(date_counts['Date'])
-
-    # Sort by date
-    date_counts = date_counts.sort_values(by='Date')
-
-    # Generate scatterplot
-    plt.figure(figsize=(10, 6))
-    plt.scatter(date_counts['Date'], date_counts['Count'])
-    plt.title('Number of Pictures Taken on Each Date')
-    plt.xlabel('Date')
-    plt.ylabel('Number of Pictures')
-    plt.grid(True)
-
-    # Convert plot to bytes
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
+    date_counts = Counter(temp)
     
-    number_of_images = len(creation_dates)
-    star_date = creation_dates[0]
-    end_date = creation_dates[-1]
+    # Prepare data for the scatter plot
+    x_values = list(date_counts.keys())   # The unique dates
+    y_values = list(date_counts.values()) # The count of each date
+    
+    # Create a scatter plot using Plotly
+    scatter = go.Scatter(
+        x=x_values,
+        y=y_values,
+        mode='markers',
+        marker=dict(color='blue', size=10, opacity=0.7)
+    )
+
+    layout = go.Layout(
+        title='Number of Pictures Taken Per Unique Date',
+        xaxis=dict(title='Date'),
+        yaxis=dict(title='Number of Pictures Taken'),
+        hovermode='closest'
+    )
+
+    fig = go.Figure(data=[scatter], layout=layout)
+
+    # Convert the plot to HTML
+    plot_url_time = pio.to_html(fig, full_html=False)
     
     
-    df['timestamp'] = pd.to_datetime(df['Date'])
     
-    # Extract the hours from the timestamp column
-    df['hour'] = df['timestamp'].dt.hour
+    
+
+# Convert string timestamps to datetime objects
+    picture_taken_times_dt = dates()
+  
+    # Extract the hour from each timestamp
+    hours = [dt.hour for dt in picture_taken_times_dt]
     
     # Count the occurrences of each hour
-    hour_counts = df['hour'].value_counts().sort_index()
+    hour_counts = Counter(hours)
     
-    # Plot the data
-    plt.figure(figsize=(10, 6))
-    hour_counts.plot(kind='bar', color='skyblue')
-    plt.title('Number of Times Each Hour Appears')
-    plt.xlabel('Time of day')
-    plt.ylabel('Frequency')
-    plt.xticks(rotation=0)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.tight_layout()
-    #plt.show()
+    # Prepare data for the bar graph
+    x_values = list(hour_counts.keys())   # The hours
+    y_values = list(hour_counts.values()) # The count of each hour
     
-    # Convert plot to bytes
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plot_url_time = base64.b64encode(img.getvalue()).decode()
+    # Sort x_values and y_values by hour for a better visual order
+    x_values, y_values = zip(*sorted(zip(x_values, y_values)))
+    
+    # Create a bar graph using Plotly
+    bars = go.Bar(
+        x=x_values,
+        y=y_values,
+        marker=dict(color='blue', opacity=0.7)
+    )
 
-    return render_template('index.html', images=number_of_images, star_date=star_date, end_date=end_date, plot_url=plot_url, plot_url_time = plot_url_time)
+    layout = go.Layout(
+        title='Frequency of Pictures Taken by Hour',
+        xaxis=dict(title='Time of Day (hours)', dtick=1),  # Ensures whole numbers on the x-axis
+        yaxis=dict(title='Number of Pictures Taken'),
+        hovermode='closest'
+    )
+
+    fig = go.Figure(data=[bars], layout=layout)
+
+    # Convert the plot to HTML
+    plot_html = pio.to_html(fig, full_html=False)
+
+    # Render HTML template with the plot embedded
+
+
+    return render_template('index.html', images=number_of_images, star_date=star_date, end_date=end_date, plot_url_time = plot_url_time, plot_html = plot_html)
 
 
 @app.route('/submit', methods=['POST'])
@@ -176,5 +196,5 @@ def status():
 
 
 if __name__ == '__main__':
-    # dates()
+ 
     app.run(debug=True)
