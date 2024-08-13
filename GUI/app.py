@@ -4,11 +4,24 @@ import os
 import platform
 from datetime import datetime
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from collections import Counter
+
+def extract_hours(df):
+    # Convert the timestamp column to datetime type
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    
+    # Extract the hours from the timestamp column
+    df['hour'] = df['timestamp'].dt.hour
+    
+    # Return only the hour column
+    return df['hour']
 
 def filter_images_by_date(start_date, end_date):
+    """Given a list of images, and a set of dates return images made between those dates"""
     image_files = []
     images_dir = 'images'
     for filename in os.listdir(images_dir):
@@ -62,12 +75,17 @@ def index():
 
     # Sample data: list of dates when pictures were taken
     picture_dates = dates()
-
+    #print(picture_dates)
     # Convert the list to a pandas DataFrame
     df = pd.DataFrame({'Date': picture_dates})
+    
+    df['Dates'] = pd.to_datetime(df['Date'])
+    
+    # Extract the hours from the timestamp column
+    df['date'] = df['Dates'].dt.date
 
     # Count the occurrences of each date
-    date_counts = df['Date'].value_counts().reset_index()
+    date_counts = df['date'].value_counts().reset_index()
     date_counts.columns = ['Date', 'Count']
 
     # Convert the 'Date' column to datetime
@@ -93,8 +111,34 @@ def index():
     number_of_images = len(creation_dates)
     star_date = creation_dates[0]
     end_date = creation_dates[-1]
+    
+    
+    df['timestamp'] = pd.to_datetime(df['Date'])
+    
+    # Extract the hours from the timestamp column
+    df['hour'] = df['timestamp'].dt.hour
+    
+    # Count the occurrences of each hour
+    hour_counts = df['hour'].value_counts().sort_index()
+    
+    # Plot the data
+    plt.figure(figsize=(10, 6))
+    hour_counts.plot(kind='bar', color='skyblue')
+    plt.title('Number of Times Each Hour Appears')
+    plt.xlabel('Time of day')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=0)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    #plt.show()
+    
+    # Convert plot to bytes
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url_time = base64.b64encode(img.getvalue()).decode()
 
-    return render_template('index.html', images=number_of_images, star_date=star_date, end_date=end_date, plot_url=plot_url)
+    return render_template('index.html', images=number_of_images, star_date=star_date, end_date=end_date, plot_url=plot_url, plot_url_time = plot_url_time)
 
 
 @app.route('/submit', methods=['POST'])
@@ -112,8 +156,8 @@ def submit():
         date2 = temp
         
     image_files = filter_images_by_date(date1, date2)
-    print(image_files)
-    return render_template('results.html', image_files=image_files)
+    total_found = len(image_files)
+    return render_template('results.html', image_files=image_files, total = total_found)
 
 
 @app.route('/status')
