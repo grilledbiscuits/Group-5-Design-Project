@@ -81,10 +81,6 @@ def index():
     star_date = dates()[0]
     end_date = dates()[-1]
     
-    
-
-    
-    
     # Convert string timestamps to datetime objects
     picture_taken_times_dt = dates()
     
@@ -118,10 +114,6 @@ def index():
     # Convert the plot to HTML
     plot_url_time = pio.to_html(fig, full_html=False)
     
-    
-    
-    
-
 # Convert string timestamps to datetime objects
     picture_taken_times_dt = dates()
   
@@ -170,7 +162,7 @@ def submit():
     pic_dates = dates()
     
     if (date1 == "" or date2==""):
-        return "Fill out both of them my guy"
+        return "Make sure to fill out both date fields"
     
     if (date2 < date1):
         temp = date1
@@ -178,6 +170,7 @@ def submit():
         date2 = temp
         
     image_files = filter_images_by_date(date1, date2)
+    
     total_found = len(image_files)
     return render_template('results.html', image_files=image_files, total = total_found)
 
