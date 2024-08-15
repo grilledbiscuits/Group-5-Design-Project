@@ -81,3 +81,16 @@ h1 {
     right: 25px;
 
 }
+
+.uploader {
+    width: 200px;  /* Adjust width as needed */
+    height: 100px; /* Adjust height as needed */
+    /* background-color: lightgray; Optional for visibility */
+    display: flex;
+  }
+  .container {
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center;    /* Vertical centering */
+    /* height: 100vh;          Full viewport height */
+  }
