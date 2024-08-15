@@ -200,7 +200,19 @@ def status():
     date = str(dt.year) + " - "+str(dt.month)+" - " + str(dt.day)
     return render_template('status.html', date=date, battery_percentage=battery_percentage, wifi_strength=wifi_strength, uptime=uptime, time_of_day=time_of_day)
 
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' in request.files:
+        file = request.files['file']
+        if file.filename != '':
+            # filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+            # Optionally, move the file to the 'static' folder
+            # os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join('static', filename))
+            return 'File uploaded successfully!'
+    return 'No file uploaded.'
 
 if __name__ == '__main__':
- 
+    Upload_folder = "static"
+    app.config['UPLOAD_FOLDER'] = Upload_folder
     app.run(debug=True)
