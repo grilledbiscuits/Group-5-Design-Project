@@ -7,18 +7,39 @@
     <title>Picture finder</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   
+       
 </head>
 
 <body>
     <div class="block">
         <h1>Graphical User Interface</h1>
+
+        {%if success == "true"%}
+         <div id="success-message">Upload successful!</div>
+
+        {% endif %}
+
         <h3>Details:</h3>
         <div class="details">
             <strong> Number of images</strong><br>{{images}}<br><br>
             <strong> Start date</strong> <br> {{star_date}}<br><br>
             <strong>End date</strong> <br> {{end_date}}<br><br><br>
+
+            <div class = "upload_text">
+                <h3>Upload more pictures into the database: </h3> <br> 
+                </div>
+                <div class="container">
+                    <div class = "uploader">
+                        <form action = "/upload" method="POST" enctype="multipart/form-data">
+                            <input class = "btn_file" type="file" name="file">
+                            <input  type="submit" value="Upload" class="button-33">
+                        </form>
+                    </div>
+                </div>
         </div>
 
+    <div>
         <form action="/submit" method="post" class="input-text">
             <b>Enter the range of dates you would like to see:</b>
             <br>
@@ -26,20 +47,14 @@
             <br>
             <input type="date" name="date2" placeholder="Second date" class="entry">
             <br>
-            <button type="submit" class="btn-go">Go</button>
+            <button type="submit" class="button-34">Go</button>
         </form>
-
+    </div>
         <div class="block-1">
-            <a href="/status" class="btn-status">Check Status</a>
+            <a href="/status" class="button-35">Check Status</a>
         </div>
-        <div class="container">
-            <div class = "uploader">
-                <form action = "/upload" method="POST" enctype="multipart/form-data">
-                    <input type="file" name="file">
-                    <input type="submit" value="Upload">
-                </form>
-            </div>
-        </div>
+    </div>
+        
     </div>
 
     <div class = "block">
@@ -51,6 +66,20 @@
         <div id="plot-container">{{ plot_html|safe }}</div>
     </div>
         
+    
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true') {
+                const successMessage = document.getElementById('success-message');
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+        };
+    </script>
+
 </body>
 
 </html>

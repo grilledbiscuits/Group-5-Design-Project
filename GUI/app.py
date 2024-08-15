@@ -153,9 +153,9 @@ def index():
     # Convert the plot to HTML
     plot_html = pio.to_html(fig, full_html=False)
 
-    success = request.args.get("success")
+    #success = request.args.get('success')
     # Render HTML template with the plot embedded
-    return render_template('index.html', success = success, images=number_of_images, star_date=star_date, end_date=end_date, plot_url_time = plot_url_time, plot_html = plot_html)
+    return render_template('index.html', success = success,images=number_of_images, star_date=star_date, end_date=end_date, plot_url_time = plot_url_time, plot_html = plot_html)
 
 
 @app.route('/submit', methods=['POST'])
@@ -209,10 +209,11 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
             # Optionally, move the file to the 'static' folder
             # os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join('static', filename))
-            return redirect(url_for('index', success='true'))
+            return redirect(url_for('index', success= "true"))
     return 'No file uploaded.'
 
 if __name__ == '__main__':
+    success = "false"
     Upload_folder = "static"
     app.config['UPLOAD_FOLDER'] = Upload_folder
     app.run(debug=True)
