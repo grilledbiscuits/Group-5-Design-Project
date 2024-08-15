@@ -12,6 +12,20 @@ from collections import Counter
 import plotly.graph_objs as go
 import plotly.io as pio
 
+def creation_date(file_path):
+        """
+        Try to get the date that a file was created, falling back to when it was last modified if creation date isn't available.
+        This works on Windows, Unix/Linux.
+        """
+        if platform.system() == 'Windows':
+            return datetime.fromtimestamp(os.path.getctime(file_path))
+        else:
+            stat = os.stat(file_path)
+            try:
+                return datetime.fromtimestamp(stat.st_birthtime)
+            except AttributeError:
+                # For Unix/Linux fallback to last modified time if birthtime is not available
+                return datetime.fromtimestamp(stat.st_mtime)
 
 
 
@@ -29,43 +43,33 @@ def filter_images_by_date(start_date, end_date):
     """Given a list of images, and a set of dates return images made between those dates"""
     image_files = []
     images_dir = 'static'
-    for filename in os.listdir(images_dir):
-        if filename.endswith('.jpeg') or filename.endswith('.jpg') or filename.endswith('.png'):
-            creation_time_str = datetime.fromtimestamp(os.path.getctime(os.path.join(images_dir, filename))).strftime('%Y-%m-%d')
-            creation_time = datetime.strptime(creation_time_str, '%Y-%m-%d')
-            creation_time = str(creation_time)
-            if start_date <= creation_time <= end_date:
-                image_files.append(filename)
+    if not os.path.isdir(images_dir):
+        return "Invalid directory path. create the static file and fill it with images"
+    
+    files = os.listdir(images_dir)
+    for file in files:
+        if file.endswith('.jpeg') or file.endswith('.jpg') or file.endswith('.png'):
+            file_path = os.path.join(images_dir, file)
+            if os.path.isfile(file_path):
+                if start_date <= creation_date(file_path) and creation_date(file_path) <= end_date:
+                    image_files.append(file)
+            
     return image_files
 
 def dates():
     """Returns a list of dates of the creation of all the files in a given directory"""
 
-    def creation_date(file_path):
-        """
-        Try to get the date that a file was created, falling back to when it was last modified if creation date isn't available.
-        This works on Windows, Unix/Linux.
-        """
-        if platform.system() == 'Windows':
-            return datetime.fromtimestamp(os.path.getctime(file_path))
-        else:
-            stat = os.stat(file_path)
-            try:
-                return datetime.fromtimestamp(stat.st_birthtime)
-            except AttributeError:
-                # For Unix/Linux fallback to last modified time if birthtime is not available
-                return datetime.fromtimestamp(stat.st_mtime)
-
     creation_dates = []
     directory = "static"
     if not os.path.isdir(directory):
-        return "Invalid directory path."
+        return "Invalid directory path. there is not static file, it needs to be created"
 
     files = os.listdir(directory)
     for file in files:
-        file_path = os.path.join(directory, file)
-        if os.path.isfile(file_path):
-            creation_dates.append(creation_date(file_path))
+        if file.endswith('.jpeg') or file.endswith('.jpg') or file.endswith('.png'):
+            file_path = os.path.join(directory, file)
+            if os.path.isfile(file_path):
+                creation_dates.append(creation_date(file_path))
     creation_dates = sorted(creation_dates)
     return creation_dates
 
@@ -149,9 +153,8 @@ def index():
     # Convert the plot to HTML
     plot_html = pio.to_html(fig, full_html=False)
 
+    
     # Render HTML template with the plot embedded
-
-
     return render_template('index.html', images=number_of_images, star_date=star_date, end_date=end_date, plot_url_time = plot_url_time, plot_html = plot_html)
 
 
@@ -159,19 +162,29 @@ def index():
 def submit():
     date1 = request.form['date1']
     date2 = request.form['date2']
-    pic_dates = dates()
+    
+    
     
     if (date1 == "" or date2==""):
         return "Make sure to fill out both date fields"
     
+    
+    date1 = datetime.strptime(date1, '%Y-%m-%d')
+    date2 = datetime.strptime(date2, '%Y-%m-%d')
+    # print()
+    # print(type(date1))
+    # print()
     if (date2 < date1):
         temp = date1
         date1 = date2
         date2 = temp
         
+    
+        
     image_files = filter_images_by_date(date1, date2)
     
     total_found = len(image_files)
+    #return image_files
     return render_template('results.html', image_files=image_files, total = total_found)
 
 
