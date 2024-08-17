@@ -4,10 +4,6 @@ import os
 import platform
 from datetime import datetime
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
 from collections import Counter
 import plotly.graph_objs as go
 import plotly.io as pio
@@ -26,9 +22,7 @@ def creation_date(file_path):
             except AttributeError:
                 # For Unix/Linux fallback to last modified time if birthtime is not available
                 return datetime.fromtimestamp(stat.st_mtime)
-
-
-
+            
 def extract_hours(df):
     # Convert the timestamp column to datetime type
     df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -73,14 +67,17 @@ def dates():
     creation_dates = sorted(creation_dates)
     return creation_dates
 
-
 app = Flask(__name__)
-
-
 @app.route('/')
-def index():
+def main():
+    star_date = dates()[0]
+    end_date = dates()[-1]
+    number_of_images = len(dates())
+    return render_template('main.html', star_date=star_date, end_date=end_date,images=number_of_images)   
 
-    
+
+@app.route('/index')
+def index():
     number_of_images = len(dates())
     star_date = dates()[0]
     end_date = dates()[-1]
@@ -118,7 +115,7 @@ def index():
     # Convert the plot to HTML
     plot_url_time = pio.to_html(fig, full_html=False)
     
-# Convert string timestamps to datetime objects
+    # Convert string timestamps to datetime objects
     picture_taken_times_dt = dates()
   
     # Extract the hour from each timestamp
@@ -157,18 +154,14 @@ def index():
     # Render HTML template with the plot embedded
     return render_template('index.html', success = success,images=number_of_images, star_date=star_date, end_date=end_date, plot_url_time = plot_url_time, plot_html = plot_html)
 
-
 @app.route('/submit', methods=['POST'])
 def submit():
     date1 = request.form['date1']
     date2 = request.form['date2']
     
-    
-    
     if (date1 == "" or date2==""):
         return "Make sure to fill out both date fields"
-    
-    
+
     date1 = datetime.strptime(date1, '%Y-%m-%d')
     date2 = datetime.strptime(date2, '%Y-%m-%d')
     # print()
@@ -178,15 +171,11 @@ def submit():
         temp = date1
         date1 = date2
         date2 = temp
-        
-    
-        
+            
     image_files = filter_images_by_date(date1, date2)
-    
     total_found = len(image_files)
     #return image_files
     return render_template('results.html', image_files=image_files, total = total_found)
-
 
 @app.route('/status')
 def status():
@@ -209,7 +198,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
             # Optionally, move the file to the 'static' folder
             # os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join('static', filename))
-            return redirect(url_for('index', success= "true"))
+            return redirect(url_for('main', success= "true"))
     return 'No file uploaded.'
 
 if __name__ == '__main__':
@@ -217,3 +206,4 @@ if __name__ == '__main__':
     Upload_folder = "static"
     app.config['UPLOAD_FOLDER'] = Upload_folder
     app.run(debug=True)
+    

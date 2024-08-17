@@ -78,9 +78,13 @@ h1 {
     position: absolute;
     bottom: 25px;
     right: 25px;
-
 }
-
+.block-2 {
+  height: 20%;
+  width: 20%;
+  bottom: 0px;
+  right: 0px;
+}
 .uploader {
     width: 200px;  /* Adjust width as needed */
     height: 100px; /* Adjust height as needed */
